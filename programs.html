@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Programs & Membership Plans | POWER GYM</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: #ff4d00;
+            --primary-glow: rgba(255, 77, 0, 0.6);
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(22, 22, 22, 0.85);
+            --text-light: #ffffff;
+            --text-muted: #aaaaaa;
+        }
+
+        html{
+            scroll-behavior: smooth;
+        }
+
+        body{
+            background: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* LIVE ANIMATED BACKGROUND CANVAS */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header{
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo{
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a{
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            font-size: 16px;
+            transition: .3s ease;
+        }
+
+        nav a:hover{
+            color: var(--primary-color);
+        }
+
+        .page-banner {
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.92)), url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1920') center/cover;
+            padding: 80px 8% 40px 8%;
+            text-align: center;
+            border-bottom: 1px solid #222;
+        }
+
+        .page-banner h1 {
+            font-size: 45px;
+            font-weight: 900;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .page-banner p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        section{
+            padding: 80px 8%;
+        }
+
+        .section-title{
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .card{
+            background: var(--bg-card);
+            backdrop-filter: blur(5px);
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #222;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card.show{
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover{
+            transform: translateY(-8px) !important;
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 20px rgba(255, 77, 0, 0.15);
+        }
+
+        .card h3{
+            margin-bottom: 15px;
+            font-size: 22px;
+            color: var(--text-light);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .price{
+            font-size: 45px;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .btn-select {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--primary-color);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-select:hover {
+            background: var(--primary-color);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        footer{
+            background: #000;
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid #222;
+            color: var(--text-muted);
+            font-size: 14px;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media(max-width:768px){
+            header { padding: 15px 5%; }
+            .page-banner h1 { font-size: 32px; }
+            nav{ display: none; }
+            section { padding: 50px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<header>
+    <div class="logo">POWER GYM</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#programs">Our Programs</a>
+        <a href="#plans">Membership Plans</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+</header>
+
+<div class="page-banner">
+    <h1>CHOOSE YOUR PATH</h1>
+    <p>Explore our premium fitness programs and flexible membership plans designed for you.</p>
+</div>
+
+<section id="programs">
+    <h2 class="section-title">Our Programs</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>🏋️ Body Building</h3>
+            <p>Build muscle strength with professional weight training and advanced gym workouts.</p>
+        </div>
+        <div class="card">
+            <h3>🔥 Weight Loss</h3>
+            <p>Effective fat loss programs with diet plans and personal coaching.</p>
+        </div>
+        <div class="card">
+            <h3>❤️ Cardio Training</h3>
+            <p>Improve stamina, endurance and heart health through cardio exercises.</p>
+        </div>
+        <div class="card">
+            <h3>🥊 CrossFit</h3>
+            <p>High intensity workouts designed for strength, speed and endurance.</p>
+        </div>
+        <div class="card">
+            <h3>🧘 Yoga Classes</h3>
+            <p>Improve flexibility, posture and mental wellness through yoga sessions.</p>
+        </div>
+        <div class="card">
+            <h3>💪 Personal Training</h3>
+            <p>One-to-one training with certified fitness experts for faster results.</p>
+        </div>
+    </div>
+</section>
+
+<section id="plans">
+    <h2 class="section-title">Membership Plans</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>Monthly Plan</h3>
+            <div class="price">₹999</div>
+            <p>Full Gym Access</p>
+            <button class="btn-select" onclick="openPlanDetails('Monthly Plan', '₹999', 'Get full access to all gym equipment, cardio zone, and locker facilities for a whole month. Ideal for short-term fitness goals.')">Select Plan</button>
+        </div>
+        <div class="card">
+            <h3>Quarterly Plan</h3>
+            <div class="price">₹2499</div>
+            <p>Most Popular Plan</p>
+            <button class="btn-select" onclick="openPlanDetails('Quarterly Plan', '₹2499', 'Our most popular choice! 3 months of complete gym access + includes 2 complimentary personal training sessions and a customized beginner workout blueprint.')">Select Plan</button>
+        </div>
+        <div class="card">
+            <h3>Yearly Plan</h3>
+            <div class="price">₹7999</div>
+            <p>Premium Membership</p>
+            <button class="btn-select" onclick="openPlanDetails('Yearly Plan', '₹7999', 'The ultimate fitness commitment. 1 full year of access, zero registration fees, specialized diet charts, monthly body composition analysis, and full locker access.')">Select Plan</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 POWER GYM | All Rights Reserved</p>
+</footer>
+
+<script>
+    // BG PARTICLES INTERACTIVE ANIMATION
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
+
+    function setCanvasSize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    setCanvasSize();
+    window.addEventListener('resize', setCanvasSize);
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.4;
+            this.speedY = (Math.random() - 0.5) * 0.4;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            else if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            else if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(255, 77, 0, 0.25)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        particlesArray = [];
+        let numberOfParticles = (canvas.width * canvas.height) / 9000;
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+    }
+
+    function connect() {
+        let opacityValue = 1;
+        for (let a = 0; a < particlesArray.length; a++) {
+            for (let b = a; b < particlesArray.length; b++) {
+                let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                             + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                if (distance < (canvas.width/7) * (canvas.height/7)) {
+                    opacityValue = 1 - (distance/20000);
+                    ctx.strokeStyle = 'rgba(255, 77, 0,' + opacityValue * 0.06 + ')';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+        }
+        connect();
+        requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+    // CARD SCROLL ANIMATION
+    const cards = document.querySelectorAll(".card");
+    const animateCards = () => {
+        cards.forEach(card => {
+            const cardTop = card.getBoundingClientRect().top;
+            if(cardTop < window.innerHeight - 80){
+                card.classList.add("show");
+            }
+        });
+    };
+    window.addEventListener("DOMContentLoaded", animateCards);
+    window.addEventListener("scroll", animateCards);
+
+
+    // DUSRE TAB ME PLAN DETAILS KHOLNE KA FUNCTION
+    function openPlanDetails(name, price, description) {
+        const newPageHtml = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>\${name} Details | POWER GYM</title>
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        background: #0a0a0a;
+                        color: #ffffff;
+                        font-family: 'Segoe UI', Roboto, sans-serif;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        min-height: 100vh;
+                    }
+                    .container {
+                        background: rgba(22, 22, 22, 0.95);
+                        padding: 40px;
+                        border-radius: 16px;
+                        border: 2px solid #ff4d00;
+                        text-align: center;
+                        box-shadow: 0 0 30px rgba(255, 77, 0, 0.3);
+                        max-width: 450px;
+                        width: 90%;
+                        animation: scaleUp 0.4s ease-out;
+                    }
+                    @keyframes scaleUp {
+                        from { transform: scale(0.9); opacity: 0; }
+                        to { transform: scale(1); opacity: 1; }
+                    }
+                    h1 {
+                        color: #ff4d00;
+                        margin-bottom: 10px;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        font-size: 32px;
+                    }
+                    .price {
+                        font-size: 55px;
+                        font-weight: 800;
+                        color: #ffffff;
+                        margin: 15px 0;
+                    }
+                    p {
+                        color: #aaaaaa;
+                        font-size: 16px;
+                        line-height: 1.6;
+                        margin-bottom: 35px;
+                    }
+                    .btn-confirm {
+                        display: inline-block;
+                        padding: 12px 40px;
+                        background: #ff4d00;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 25px;
+                        font-weight: 600;
+                        font-size: 16px;
+                        border: none;
+                        cursor: pointer;
+                        transition: 0.3s;
+                        box-shadow: 0 0 15px rgba(255, 77, 0, 0.4);
+                    }
+                    .btn-confirm:hover {
+                        background: #e04400;
+                        box-shadow: 0 0 25px rgba(255, 77, 0, 0.6);
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>\${name}</h1>
+                    <div class="price">\${price}</div>
+                    <p>\${description}</p>
+                    <button class="btn-confirm" onclick="alert('Thank you for choosing \${name}! Our team will contact you soon.')">Confirm & Proceed</button>
+                </div>
+            </body>
+            </html>
+        `;
+
+        // Ek blank naya tab open karna
+        const newTab = window.open();
+        
+        // Naye tab me HTML push karna
+        newTab.document.open();
+        newTab.document.write(newPageHtml);
+        newTab.document.close();
+    }
+</script>
+
+</body>
+</html>

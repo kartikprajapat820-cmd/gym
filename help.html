@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POWER GYM | Helping Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: #ff4d00;
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(22, 22, 22, 0.85);
+            --text-light: #ffffff;
+            --text-muted: #aaaaaa;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 60px 10%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* BACK TO MAIN SITE BUTTON */
+        .back-btn {
+            align-self: flex-start;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff 40%, #ff6a00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .help-wrapper {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* CONTAINER CARD STYLE */
+        .help-card {
+            background: var(--bg-card);
+            border: 1px solid #222;
+            padding: 35px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            animation: fadeInCard 0.8s ease forwards;
+        }
+
+        .help-card h2 {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        /* ACCORDION FAQ STYLE */
+        .faq-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .faq-item {
+            border: 1px solid #222;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(30, 30, 30, 0.4);
+            transition: 0.3s;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            text-align: left;
+            padding: 18px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .faq-question:hover {
+            color: var(--primary-color);
+            background: rgba(255, 77, 0, 0.05);
+        }
+
+        .faq-question::after {
+            content: '＋';
+            font-size: 18px;
+            color: var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+            background: rgba(10, 10, 10, 0.5);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 18px 20px;
+            border-top: 1px solid #222;
+        }
+
+        /* GYM RULES LIST */
+        .rules-list {
+            list-style: none;
+        }
+
+        .rules-list li {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .rules-list li strong {
+            color: var(--text-light);
+        }
+
+        /* QUICK HELP / EMERGENCY SECTION */
+        .quick-help {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .help-box {
+            background: rgba(15, 15, 15, 0.6);
+            border: 1px dashed #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .help-box:hover {
+            border-color: var(--primary-color);
+            background: rgba(255, 77, 0, 0.02);
+        }
+
+        .help-box icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .help-box h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .help-box p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media(max-width: 768px) {
+            body { padding: 40px 5%; }
+            .page-title { font-size: 32px; }
+            .help-card { padding: 22px; }
+            .faq-question { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BACK BUTTON (Main Index File Par Wapas Jane Ke Liye) -->
+    <a href="javascript:history.back()" class="back-btn">⬅ Back to Gym</a>
+
+    <h1 class="page-title">Helping Guide</h1>
+    <p class="page-subtitle">Support & Guidelines Center</p>
+
+    <div class="help-wrapper">
+
+        <!-- FAQ ACCORDION SECTION -->
+        <div class="help-card">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-accordion">
+                
+                <div class="faq-item">
+                    <button class="faq-question">Q: Gym join karne ke liye minimum age kya hai?</button>
+                    <div class="faq-answer">
+                        Power Gym me safe training environment maintain karne ke liye minimum age limit 16 saal hai. Isse kam umar ke teenagers ke liye parental guidance zaroori hai.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Q: Kya membership plans ke sath diet chart free hai?</button>
+                    <div class="faq-answer">
+                        Haan! Hamare sabhi basic aur premium packages me certified nutritionist dwara design kiya gaya initial diet chart aur routine setup package pehle se included hai.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Q: Beginner hu, kya mujhe personal trainer lena zaroori hai?</button>
+                    <div class="faq-answer">
+                        Zaroori nahi hai. Floor par hamare general trainers hamesha rehte hain jo aapko exercise ka sahi form aur machines operate karna sahi tarike se sikha denge. Advanced targets ke liye aap personal coach hire kar sakte hain.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Q: Gym ki timing aur weekly off kab hota hai?</button>
+                    <div class="faq-answer">
+                        Power Gym Monday se Saturday subah 6:00 AM se raat 10:00 PM tak bina ruke chalu rehta hai. Sunday ko maintenance aur deep cleaning ke liye gym poori tarah off rehta hai.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- GYM RULES & SAFETY SECTION -->
+        <div class="help-card">
+            <h2>Gym Rules & Guidelines</h2>
+            <ul class="rules-list">
+                <li>❌ <strong>No Outdoor Shoes:</strong> Training floor par sirf saaf, separate sports shoes ya gym shoes hi allowed hain. Ghar se vahi shoes pehan kar na aayein.</li>
+                <li>🏋️‍♂️ <strong>Rerack Weights:</strong> Dumbbells ya weight plates use karne ke baad unhe unki sahi jagah (rack) par wapas rakhna har member ki zimmedari hai.</li>
+                <li>🧼 <strong>Hygiene First:</strong> Workout karte samay hamesha apna personal towel sath rakhein aur cardio machines ko use karne ke baad wipe zaroori karein.</li>
+                <li>🚫 <strong>Respect Space:</strong> Dusre members ke set ke beech me bina pooche space block na karein. Mobile ka zyada use floor par avoid karein.</li>
+            </ul>
+        </div>
+
+        <!-- QUICK ASSISTANCE BOXES -->
+        <div class="help-card">
+            <h2>Instant Assistance</h2>
+            <div class="quick-help">
+                <div class="help-box">
+                    <icon>📞</icon>
+                    <h4>Front Desk Support</h4>
+                    <p>+91 9876543210</p>
+                </div>
+                <div class="help-box">
+                    <icon>💬</icon>
+                    <h4>WhatsApp Query</h4>
+                    <p>Chat with Desk Manager</p>
+                </div>
+                <div class="help-box">
+                    <icon>📧</icon>
+                    <h4>Official Mail</h4>
+                    <p>powergym@gmail.com</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIMPLE INTERACTIVE ACCORDION SCRIPT -->
+    <script>
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const answer = item.querySelector('.faq-answer');
+
+                // Agar pehle se koi khula hai toh use band karein
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    if (i !== item && i.classList.contains('active')) {
+                        i.classList.remove('active');
+                        i.querySelector('.faq-answer').style.maxHeight = '0';
+                    }
+                });
+
+                // Toggle Active Class
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    answer.style.maxHeight = '0';
+                } else {
+                    item.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
